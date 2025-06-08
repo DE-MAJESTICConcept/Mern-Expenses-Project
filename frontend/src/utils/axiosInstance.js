@@ -6,7 +6,7 @@ import { getUserFromStorage } from './getUserFromStorage'; // Ensure this path i
 // Create a custom Axios instance
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
-  timeout: 5000, // Optional: Set a timeout for requests
+  timeout: 15000, // ! MODIFIED: Increased timeout to 15 seconds (from 5 seconds)
   headers: {
     'Content-Type': 'application/json',
   },
@@ -36,8 +36,6 @@ axiosInstance.interceptors.response.use(
       // Clear local storage
       localStorage.removeItem("userInfo");
       // Redirect to login page
-      // Using window.location.href for a full page reload,
-      // which is usually desired on a full logout/reauthentication.
       window.location.href = '/login'; // Adjust '/login' to your actual login route
 
       // Return a rejected promise to stop further processing for this request
