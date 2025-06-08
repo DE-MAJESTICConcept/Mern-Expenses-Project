@@ -1,11 +1,9 @@
-import axiosInstance from "../../utils/axiosInstance"; // ! NEW: Import your custom axiosInstance
-// Removed direct import of axios as it's no longer needed
-// Removed getUserFromStorage and getAuthHeaders as axiosInstance handles this now
+import axiosInstance from "../../utils/axiosInstance"; // Using the custom Axios instance
+// No need for direct 'axios' or 'getUserFromStorage' imports here anymore
 
 //! Add Transaction
 export const addTransactionAPI = async (transactionData) => {
   try {
-    // Use axiosInstance directly, interceptor will add headers
     const response = await axiosInstance.post(`/transactions/create`, transactionData);
     return response.data;
   } catch (error) {
@@ -25,7 +23,6 @@ export const listTransactionsAPI = async (filters = {}) => {
       ...(category && { category }),
     }).toString();
 
-    // Use axiosInstance directly, interceptor will add headers
     const url = `/transactions/lists${queryString ? `?${queryString}` : ''}`;
     const response = await axiosInstance.get(url);
     return response.data;
@@ -38,7 +35,6 @@ export const listTransactionsAPI = async (filters = {}) => {
 //! Get Single Transaction
 export const getSingleTransactionAPI = async (id) => {
   try {
-    // Use axiosInstance directly, interceptor will add headers
     const response = await axiosInstance.get(`/transactions/${id}`);
     return response.data;
   } catch (error) {
@@ -50,7 +46,6 @@ export const getSingleTransactionAPI = async (id) => {
 //! Update Transaction
 export const updateTransactionAPI = async (id, transactionData) => {
   try {
-    // Use axiosInstance directly, interceptor will add headers
     const response = await axiosInstance.put(`/transactions/${id}`, transactionData);
     return response.data;
   } catch (error) {
@@ -58,10 +53,10 @@ export const updateTransactionAPI = async (id, transactionData) => {
     throw error.response?.data || error;
   }
 };
+
 //! Delete Transaction
 export const deleteTransactionAPI = async (id) => {
   try {
-    // Use axiosInstance directly, interceptor will add headers
     const response = await axiosInstance.delete(`/transactions/${id}`);
     return response.data;
   } catch (error) {
@@ -73,7 +68,6 @@ export const deleteTransactionAPI = async (id) => {
 //! Get Financial Summary for Advice
 export const getFinancialSummaryForAdviceAPI = async () => {
   try {
-    // Use axiosInstance directly, interceptor will add headers
     const response = await axiosInstance.get(`/transactions/summary-for-advice`);
     return response.data;
   } catch (error) {
