@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.insights-text {
+    color: #2F855A; /* A darker green/teal for advice */
+    font-weight: 500;
+    /* You can add a subtle background or gradient if needed */
+    background: linear-gradient(to right, #e6ffe6, #d0ffd0);
+    padding: 5px 0;
+    border-radius: 5px;
+}
