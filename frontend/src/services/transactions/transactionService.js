@@ -1,4 +1,4 @@
-import axiosInstance from "./utils/axiosInstance"; // ! NEW: Import your custom axiosInstance
+import axiosInstance from "../../utils/axiosInstance"; // ! NEW: Import your custom axiosInstance
 // Removed direct import of axios as it's no longer needed
 // Removed getUserFromStorage and getAuthHeaders as axiosInstance handles this now
 
