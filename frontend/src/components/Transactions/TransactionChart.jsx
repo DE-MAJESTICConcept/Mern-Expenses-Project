@@ -1,85 +1,113 @@
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
-import { listTransactionsAPI } from "../../services/transactions/transactionService";
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+import { getFinancialSummaryForAdviceAPI } from '../../services/transactions/transactionService'; // ! IMPORTANT: Import the API function
+import AlertMessage from '../Alert/AlertMessage'; // Assuming you have an AlertMessage component
 
+// Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const TransactionChart = () => {
+  // Use React Query to fetch financial summary data
   const {
-    data: transactions,
-    isError,
+    data: summaryData,
     isLoading,
-    isFetched,
+    isError,
     error,
-    refetch,
   } = useQuery({
-    queryFn: listTransactionsAPI,
-    queryKey: ["list-transactions"],
+    queryFn: getFinancialSummaryForAdviceAPI, // Use the API function directly
+    queryKey: ['financialSummary'],
   });
 
-  //! calculate total income and expense
-  const totals = transactions?.reduce(
-    (acc, transaction) => {
-      if (transaction?.type === "income") {
-        acc.income += transaction?.amount;
-      } else {
-        acc.expense += transaction?.amount;
-      }
-      return acc;
-    },
-    { income: 0, expense: 0 }
-  );
-  //! Data structure for the chart
-  const data = {
-    labels: ["Income", "Expense"],
+  // Prepare chart data once summaryData is available
+  const chartData = {
+    labels: ['Income', 'Expense'],
     datasets: [
       {
-        label: "Transactions",
-        data: [totals?.income, totals?.expense],
-        backgroundColor: ["#36A2EB", "#FF6384"],
-        borderColor: ["#36A2EB", "#FF6384"],
-        borderWith: 1,
+        data: [summaryData?.totalIncome || 0, summaryData?.totalExpense || 0],
+        backgroundColor: ['#36A2EB', '#FF6384'], // Blue for Income, Pink for Expense
         hoverOffset: 4,
       },
     ],
   };
-  const options = {
+
+  const chartOptions = {
+    responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "bottom",
+        position: 'bottom', // Position legend below the chart
         labels: {
-          padding: 25,
-          boxWidth: 12,
           font: {
             size: 14,
+            family: 'Inter, sans-serif',
           },
+          color: '#333', // Darker color for legend labels
         },
       },
-      title: {
-        display: true,
-        text: "Income vs Expense",
-        font: {
-          size: 18,
-          weight: "bold",
-        },
-        padding: {
-          top: 10,
-          bottom: 30,
-        },
-      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            let label = context.label || '';
+            if (label) {
+              label += ': ';
+            }
+            if (context.parsed !== null) {
+              label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
+            }
+            return label;
+          }
+        }
+      }
     },
-    cutout: "70%",
   };
+
+
+  // --- Render Loading/Error States ---
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <AlertMessage type="loading" message="Loading transaction overview..." />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <AlertMessage
+          type="error"
+          message={error?.response?.data?.message || error?.message || "Error loading data: An unexpected error occurred."}
+        />
+      </div>
+    );
+  }
+
+  // If no data (e.g., first login, no transactions), show a message
+  if (!summaryData || (summaryData.totalIncome === 0 && summaryData.totalExpense === 0)) {
+    return (
+      <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md text-yellow-800 text-center">
+        No transaction data available to display chart. Add some transactions!
+      </div>
+    );
+  }
+
   return (
-    <div className="my-8 p-6 bg-white rounded-lg shadow-xl border border-gray-200">
-      <h1 className="text-2xl font-bold text-center mb-6">
-        Transaction Overview
-      </h1>
-      <div style={{ height: "350px" }}>
-        <Doughnut data={data} options={options} />
+    <div className="bg-white p-6 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Transaction Overview</h2>
+      <div className="h-64 w-full flex justify-center items-center"> {/* Set a fixed height for the chart */}
+        <Doughnut data={chartData} options={chartOptions} />
+      </div>
+      <div className="flex justify-around items-center mt-6 text-lg font-semibold">
+        <div className="flex flex-col items-center">
+          <span className="text-blue-600">Income</span>
+          <span className="text-gray-800">${summaryData.totalIncome.toFixed(2)}</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <span className="text-pink-600">Expense</span>
+          <span className="text-gray-800">${summaryData.totalExpense.toFixed(2)}</span>
+        </div>
       </div>
     </div>
   );
