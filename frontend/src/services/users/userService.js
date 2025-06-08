@@ -1,8 +1,10 @@
-import axios from "axios";
-import { BASE_URL } from "../../utils/url";
-import { getUserFromStorage } from "../../utils/getUserFromStorage";
+import axiosInstance from "../../utils/axiosInstance"; // ! NEW: Import your custom axiosInstance
+import { getUserFromStorage } from "../../utils/getUserFromStorage"; // Still needed for token retrieval
 
-// Helper function to get authentication headers dynamically (for authenticated APIs)
+// Helper function to get authentication headers dynamically (still needed for specific headers not covered by interceptor if any)
+// For this updated setup, this function largely becomes redundant IF all authenticated calls use axiosInstance
+// and the token is correctly attached by the request interceptor.
+// However, I'll keep it for clarity for now, but actual usage will simplify.
 const getAuthHeaders = () => {
   const token = getUserFromStorage();
   if (!token) {
@@ -18,10 +20,14 @@ const getAuthHeaders = () => {
 
 //! --- User Authentication APIs ---
 
-// Login
+// Login (Does NOT use getAuthHeaders as it's for logging in and getting a token)
 export const loginAPI = async ({ email, password }) => {
   try {
-    const response = await axios.post(`${BASE_URL}/users/login`, { email, password });
+    // Use axiosInstance directly, it already has baseURL configured
+    const response = await axiosInstance.post(`/users/login`, {
+      email,
+      password,
+    });
     return response.data;
   } catch (error) {
     console.error("Error in loginAPI:", error.response?.data || error.message);
@@ -29,10 +35,15 @@ export const loginAPI = async ({ email, password }) => {
   }
 };
 
-// Register
+// Register (Does NOT use getAuthHeaders)
 export const registerAPI = async ({ email, password, username }) => {
   try {
-    const response = await axios.post(`${BASE_URL}/users/register`, { email, password, username });
+    // Use axiosInstance directly
+    const response = await axiosInstance.post(`/users/register`, {
+      email,
+      password,
+      username,
+    });
     return response.data;
   } catch (error) {
     console.error("Error in registerAPI:", error.response?.data || error.message);
@@ -40,10 +51,14 @@ export const registerAPI = async ({ email, password, username }) => {
   }
 };
 
-// Change Password (requires authentication)
+//! Change Password (uses axiosInstance, token attached by interceptor)
 export const changePasswordAPI = async (newPassword) => {
   try {
-    const response = await axios.put(`${BASE_URL}/users/change-password`, { newPassword }, getAuthHeaders());
+    // Pass config directly, interceptor will add Authorization header
+    const response = await axiosInstance.put(
+      `/users/change-password`,
+      { newPassword }
+    );
     return response.data;
   } catch (error) {
     console.error("Error in changePasswordAPI:", error.response?.data || error.message);
@@ -51,10 +66,14 @@ export const changePasswordAPI = async (newPassword) => {
   }
 };
 
-// Update Profile (requires authentication)
+//! Update Profile (uses axiosInstance, token attached by interceptor)
 export const updateProfileAPI = async ({ email, username }) => {
   try {
-    const response = await axios.put(`${BASE_URL}/users/update-profile`, { email, username }, getAuthHeaders());
+    // Pass config directly, interceptor will add Authorization header
+    const response = await axiosInstance.put(
+      `/users/update-profile`,
+      { email, username }
+    );
     return response.data;
   } catch (error) {
     console.error("Error in updateProfileAPI:", error.response?.data || error.message);
@@ -62,10 +81,11 @@ export const updateProfileAPI = async ({ email, username }) => {
   }
 };
 
-// Initiate Password Reset (does NOT require authentication)
+//! Initiate Password Reset (typically does NOT require authentication)
 export const initiatePasswordResetAPI = async (email) => {
   try {
-    const response = await axios.post(`${BASE_URL}/users/forgot-password`, { email });
+    // Use axiosInstance directly
+    const response = await axiosInstance.post(`/users/forgot-password`, { email });
     return response.data;
   } catch (error) {
     console.error("Error in initiatePasswordResetAPI:", error.response?.data || error.message);
@@ -73,12 +93,13 @@ export const initiatePasswordResetAPI = async (email) => {
   }
 };
 
-//! NEW: Reset Password API (uses token from URL, does NOT require session authentication)
+//! Reset Password API (uses token from URL, does NOT require session authentication)
 export const resetPasswordAPI = async (token, newPassword) => {
   try {
-    const response = await axios.post(
-      `${BASE_URL}/users/reset-password/${token}`, // Endpoint will include the token
-      { newPassword } // Send the new password in the body
+    // Use axiosInstance directly
+    const response = await axiosInstance.post(
+      `/users/reset-password/${token}`,
+      { newPassword }
     );
     return response.data;
   } catch (error) {
@@ -86,10 +107,3 @@ export const resetPasswordAPI = async (token, newPassword) => {
     throw error.response?.data || error;
   }
 };
-
-
-
-
-
-
-
