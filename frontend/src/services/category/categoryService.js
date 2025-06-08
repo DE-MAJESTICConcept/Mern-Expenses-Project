@@ -1,60 +1,58 @@
-import axiosInstance from "../../utils/axiosInstance";
-import { BASE_URL } from "../../utils/url";
-import { getUserFromStorage } from "../../utils/getUserFromStorage";
+import axiosInstance from "../../utils/axiosInstance"; // Using the custom Axios instance
 
-//! Get the token
-const token = getUserFromStorage();
-//! Add
-export const addCategoryAPI = async ({ name, type }) => {
-  const response = await axios.post(
-    `${BASE_URL}/categories/create`,
-    {
-      name,
-      type,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  //Return a promise
-  return response.data;
+//! Add Category
+export const addCategoryAPI = async (categoryData) => {
+  try {
+    const response = await axiosInstance.post(`/categories/create`, categoryData);
+    return response.data;
+  } catch (error) {
+    console.error("Error in addCategoryAPI:", error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
 };
-//! update
-export const updateCategoryAPI = async ({ name, type, id }) => {
-  const response = await axios.put(
-    `${BASE_URL}/categories/update/${id}`,
-    {
-      name,
-      type,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  //Return a promise
-  return response.data;
+
+//! List Categories
+export const listCategoriesAPI = async (filters = {}) => {
+  try {
+    const queryString = new URLSearchParams(filters).toString();
+    const url = `/categories/lists${queryString ? `?${queryString}` : ''}`;
+    const response = await axiosInstance.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Error in listCategoriesAPI:", error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
 };
-//! delete
+
+//! Get Single Category
+export const getSingleCategoryAPI = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/categories/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getSingleCategoryAPI:", error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
+
+//! Update Category
+export const updateCategoryAPI = async (id, categoryData) => {
+  try {
+    const response = await axiosInstance.put(`/categories/${id}`, categoryData);
+    return response.data;
+  } catch (error) {
+    console.error("Error in updateCategoryAPI:", error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
+
+//! Delete Category
 export const deleteCategoryAPI = async (id) => {
-  const response = await axios.delete(`${BASE_URL}/categories/delete/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  //Return a promise
-  return response.data;
-};
-//! lists
-export const listCategoriesAPI = async () => {
-  const response = await axios.get(`${BASE_URL}/categories/lists`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  //Return a promise
-  return response.data;
+  try {
+    const response = await axiosInstance.delete(`/categories/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in deleteCategoryAPI:", error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
 };
