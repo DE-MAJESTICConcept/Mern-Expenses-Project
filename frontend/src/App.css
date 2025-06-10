@@ -1,9 +1,9 @@
 /* src/App.css */
 
-/* /* ! IMPORTANT: Tailwind directives MUST be at the very top */
-/* @tailwind base;
+/* ! IMPORTANT: Tailwind directives MUST be at the very top */
+@tailwind base;
 @tailwind components;
-@tailwind utilities; */
+@tailwind utilities;
 
 /* --- Google Font Import --- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
