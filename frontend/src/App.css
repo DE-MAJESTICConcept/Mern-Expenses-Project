@@ -1,8 +1,12 @@
 /* src/App.css */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ! IMPORTANT: Tailwind directives MUST be at the very top */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* --- Google Font Import --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* --- Base HTML and Body Styles --- */
 html, body {
@@ -21,29 +25,33 @@ html, body {
 }
 
 /* --- Main Application Content Wrapper --- */
+/* This is CRUCIAL for fixed navbars. It creates space below the navbar. */
+/* Apply this class to the div that wraps ALL your <Routes> content in App.jsx. */
 .main-app-content-wrapper {
-  padding-top: 80px;
-  position: relative;
-  z-index: 1;
-  min-height: calc(100vh - 80px);
-  box-sizing: border-box;
+  padding-top: 80px; /* Adjust this value to be slightly more than your navbar's actual height (e.g., 64px for h-16 + vertical padding) */
+  position: relative; /* Establishes a stacking context for its children */
+  z-index: 1; /* Ensures main content is below fixed elements like chatbot overlay */
+  min-height: calc(100vh - 80px); /* Ensure content area takes up remaining height */
+  box-sizing: border-box; /* Include padding in element's total width and height */
 }
 
 /* --- General Responsive Utilities (Beyond Navbar) --- */
+
+/* Responsive containers for content areas */
 .container-responsive {
-  max-width: 1200px;
+  max-width: 1200px; /* Max width for desktop content */
   margin-left: auto;
   margin-right: auto;
-  padding: 1rem;
+  padding: 1rem; /* Default padding for all sizes */
 }
 
-@media (min-width: 640px) {
+@media (min-width: 640px) { /* sm breakpoint */
   .container-responsive {
     padding: 1.5rem;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) { /* lg breakpoint */
   .container-responsive {
     padding: 2rem;
   }
@@ -83,12 +91,12 @@ html, body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Floating Chatbot Overlay Container */
+/* Floating Chatbot Overlay Container - RIGHT ALIGNED, VERTICALLY CENTERED */
 .chatbot-overlay-wrapper {
   position: fixed;
-  top: 50%;
-  right: 30px;
-  transform: translateY(-50%);
+  top: 50%; /* Align its midpoint vertically */
+  right: 30px; /* Position it 30px from the right edge */
+  transform: translateY(-50%); /* Adjust upwards by half its own height for perfect vertical centering */
   width: 100%;
   max-width: 380px;
   height: 550px;
@@ -102,7 +110,8 @@ html, body {
   opacity: 1;
   transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 
-  margin: 10px;
+  /* Ensure it doesn't go off-screen on very small devices */
+  margin: 10px; /* Provides some margin on small screens if it's too wide */
   box-sizing: border-box;
 }
 
@@ -123,12 +132,13 @@ html, body {
   }
 
   .chatbot-overlay-wrapper {
-    bottom: 10px;
-    right: 10px;
-    top: auto;
-    transform: none;
+    /* For mobile, it still aligns to bottom-right or covers most of screen */
+    bottom: 10px; /* Reset from top: 50% */
+    right: 10px; /* Keep it aligned to the right */
+    top: auto; /* Remove top centering for mobile, rely on bottom/right */
+    transform: none; /* Remove transform for mobile, rely on bottom/right */
     width: calc(100% - 20px);
-    height: calc(100vh - 80px);
+    height: calc(100vh - 80px); /* Adjusted to not hide too much */
     max-width: none;
     border-radius: 8px;
     box-shadow: none;
@@ -146,8 +156,8 @@ html, body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  background-color: #ffffff; /* Give the container a background if wrapper is transparent */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1); /* Add a subtle shadow to the chatbot window */
 }
 
 .react-chatbot-kit-chat-inner-container {
@@ -155,9 +165,9 @@ html, body {
   border-radius: 0 !important;
   flex-grow: 1;
   display: flex;
-  flex-direction: column-reverse;
-  overflow-y: auto;
-  padding-bottom: 10px;
+  flex-direction: column-reverse; /* Keeps new messages at the bottom */
+  overflow-y: auto; /* THIS IS THE KEY for scrolling */
+  padding-bottom: 10px; /* Add a little space at the bottom of the scrollable area */
 }
 
 .react-chatbot-kit-chat-header {
@@ -193,8 +203,8 @@ html, body {
     line-height: 1.4;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     animation: fadeIn 0.3s ease-out;
-    align-self: flex-start;
-    margin-left: 10px;
+    align-self: flex-start; /* Align bot message to left */
+    margin-left: 10px; /* Small margin from left edge */
     border: 1px solid rgba(190, 220, 240, 0.7);
 }
 
@@ -209,8 +219,8 @@ html, body {
     line-height: 1.4;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     animation: fadeIn 0.3s ease-out;
-    align-self: flex-end;
-    margin-right: 10px;
+    align-self: flex-end; /* Align user message to right */
+    margin-right: 10px; /* Small margin from right edge */
     border: 1px solid rgba(220, 220, 220, 0.7);
 }
 
