@@ -6,7 +6,7 @@ import jsPDF from 'jspdf';
 import { useQuery } from '@tanstack/react-query'; // ! NEW: Import useQuery
 import { listCategoriesAPI } from '../../services/category/categoryService'; // ! NEW: Import category service
 import { getFinancialSummaryForAdviceAPI } from '../../services/transactions/transactionService'; // ! NEW: Import transaction summary service
-import AlertMessage from '../Alert/AlertMessage'; // Assuming you have an AlertMessage component
+import AlertMessage from '../Alert/AlertMessage';
 
 const Dashboard = () => {
   const dashboardRef = useRef(null);
