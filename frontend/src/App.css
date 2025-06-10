@@ -1,10 +1,4 @@
-
-/* ! IMPORTANT: Tailwind directives MUST be at the very top */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* --- Google Font Import --- */
+/* src/App.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* --- Base HTML and Body Styles --- */
@@ -24,33 +18,29 @@ html, body {
 }
 
 /* --- Main Application Content Wrapper --- */
-/* This is CRUCIAL for fixed navbars. It creates space below the navbar. */
-/* Apply this class to the div that wraps ALL your <Routes> content in App.jsx. */
 .main-app-content-wrapper {
-  padding-top: 80px; /* Adjust this value to be slightly more than your navbar's actual height (e.g., 64px for h-16 + vertical padding) */
-  position: relative; /* Establishes a stacking context for its children */
-  z-index: 1; /* Ensures main content is below fixed elements like chatbot overlay */
-  min-height: calc(100vh - 80px); /* Ensure content area takes up remaining height */
-  box-sizing: border-box; /* Include padding in element's total width and height */
+  padding-top: 80px;
+  position: relative;
+  z-index: 1;
+  min-height: calc(100vh - 80px);
+  box-sizing: border-box;
 }
 
 /* --- General Responsive Utilities (Beyond Navbar) --- */
-
-/* Responsive containers for content areas */
 .container-responsive {
-  max-width: 1200px; /* Max width for desktop content */
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  padding: 1rem; /* Default padding for all sizes */
+  padding: 1rem;
 }
 
-@media (min-width: 640px) { /* sm breakpoint */
+@media (min-width: 640px) {
   .container-responsive {
     padding: 1.5rem;
   }
 }
 
-@media (min-width: 1024px) { /* lg breakpoint */
+@media (min-width: 1024px) {
   .container-responsive {
     padding: 2rem;
   }
@@ -90,12 +80,12 @@ html, body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Floating Chatbot Overlay Container - RIGHT ALIGNED, VERTICALLY CENTERED */
+/* Floating Chatbot Overlay Container */
 .chatbot-overlay-wrapper {
   position: fixed;
-  top: 50%; /* Align its midpoint vertically */
-  right: 30px; /* Position it 30px from the right edge */
-  transform: translateY(-50%); /* Adjust upwards by half its own height for perfect vertical centering */
+  top: 50%;
+  right: 30px;
+  transform: translateY(-50%);
   width: 100%;
   max-width: 380px;
   height: 550px;
@@ -109,8 +99,7 @@ html, body {
   opacity: 1;
   transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 
-  /* Ensure it doesn't go off-screen on very small devices */
-  margin: 10px; /* Provides some margin on small screens if it's too wide */
+  margin: 10px;
   box-sizing: border-box;
 }
 
@@ -131,13 +120,12 @@ html, body {
   }
 
   .chatbot-overlay-wrapper {
-    /* For mobile, it still aligns to bottom-right or covers most of screen */
-    bottom: 10px; /* Reset from top: 50% */
-    right: 10px; /* Keep it aligned to the right */
-    top: auto; /* Remove top centering for mobile, rely on bottom/right */
-    transform: none; /* Remove transform for mobile, rely on bottom/right */
+    bottom: 10px;
+    right: 10px;
+    top: auto;
+    transform: none;
     width: calc(100% - 20px);
-    height: calc(100vh - 80px); /* Adjusted to not hide too much */
+    height: calc(100vh - 80px);
     max-width: none;
     border-radius: 8px;
     box-shadow: none;
@@ -155,8 +143,8 @@ html, body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff; /* Give the container a background if wrapper is transparent */
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1); /* Add a subtle shadow to the chatbot window */
+  background-color: #ffffff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
 .react-chatbot-kit-chat-inner-container {
@@ -164,9 +152,9 @@ html, body {
   border-radius: 0 !important;
   flex-grow: 1;
   display: flex;
-  flex-direction: column-reverse; /* Keeps new messages at the bottom */
-  overflow-y: auto; /* THIS IS THE KEY for scrolling */
-  padding-bottom: 10px; /* Add a little space at the bottom of the scrollable area */
+  flex-direction: column-reverse;
+  overflow-y: auto;
+  padding-bottom: 10px;
 }
 
 .react-chatbot-kit-chat-header {
@@ -202,8 +190,8 @@ html, body {
     line-height: 1.4;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     animation: fadeIn 0.3s ease-out;
-    align-self: flex-start; /* Align bot message to left */
-    margin-left: 10px; /* Small margin from left edge */
+    align-self: flex-start;
+    margin-left: 10px;
     border: 1px solid rgba(190, 220, 240, 0.7);
 }
 
@@ -218,8 +206,8 @@ html, body {
     line-height: 1.4;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     animation: fadeIn 0.3s ease-out;
-    align-self: flex-end; /* Align user message to right */
-    margin-right: 10px; /* Small margin from right edge */
+    align-self: flex-end;
+    margin-right: 10px;
     border: 1px solid rgba(220, 220, 220, 0.7);
 }
 
@@ -350,57 +338,32 @@ html, body {
 /* ! NEW: Explicit color overrides for html2canvas compatibility */
 /* These will ensure that common Tailwind shades used in your components are rendered as hex/rgb */
 /* instead of potentially newer CSS color formats like oklch/lab that html2canvas may not support. */
-/* Using !important to ensure these styles take precedence */
 .bg-white { background-color: #ffffff !important; }
 .bg-gray-50 { background-color: #f9fafb !important; }
 .bg-gray-100 { background-color: #f3f4f6 !important; }
 .bg-gray-200 { background-color: #e5e7eb !important; }
 .bg-gray-300 { background-color: #d1d5db !important; }
-.bg-gray-400 { background-color: #9ca3af !important; } /* Added for disabled buttons */
 .bg-gray-600 { background-color: #4b5563 !important; } /* For modal background */
-.text-gray-400 { color: #9ca3af !important; }
-.text-gray-500 { color: #6b7280 !important; }
-.text-gray-600 { color: #4b5563 !important; }
 .text-gray-700 { color: #374151 !important; }
 .text-gray-800 { color: #1f2937 !important; }
 .text-gray-900 { color: #111827 !important; }
 
-.bg-blue-500 { background-color: #3b82f6 !important; } /* For various buttons */
-.hover\:bg-blue-600:hover { background-color: #2563eb !important; }
-.focus\:ring-blue-500:focus { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5) !important; }
-.border-blue-500 { border-color: #3b82f6 !important; }
-.text-blue-500 { color: #3b82f6 !important; }
+.bg-blue-600 { background-color: #2563eb !important; }
+.hover\:bg-blue-700:hover { background-color: #1d4ed8 !important; }
 .text-blue-600 { color: #2563eb !important; }
-.hover\:text-blue-700:hover { color: #1d4ed8 !important; }
 
-.bg-green-100 { background-color: #dcfce7 !important; }
-.text-green-800 { color: #166534 !important; }
-.bg-green-500 { background-color: #22c55e !important; }
-.hover\:bg-green-600:hover { background-color: #16a34a !important; }
+.bg-green-600 { background-color: #16a34a !important; }
 .text-green-600 { color: #16a34a !important; }
-.text-green-700 { color: #15803d !important; } /* For positive balance */
+.text-green-700 { color: #15803d !important; }
 
-.bg-red-100 { background-color: #fee2e2 !important; }
-.text-red-800 { color: #991b1b !important; }
-.bg-red-500 { background-color: #ef4444 !important; }
-.hover\:bg-red-600:hover { background-color: #dc2626 !important; }
+.bg-red-600 { background-color: #dc2626 !important; }
 .text-red-600 { color: #dc2626 !important; }
-.text-red-700 { color: #b91c1c !important; } /* For negative balance/warnings */
-
-.bg-pink-600 { background-color: #db2777 !important; }
-.hover\:bg-pink-700:hover { background-color: #be185d !important; }
-.focus-visible\:outline-pink-600:focus-visible { outline-color: #db2777 !important; }
-
-.bg-indigo-600 { background-color: #4f46e5 !important; }
-.hover\:bg-indigo-700:hover { background-color: #4338ca !important; }
-.bg-indigo-700 { background-color: #4338ca !important; } /* Ensure specific shade if used */
-.hover\:bg-indigo-800:hover { background-color: #3730a3 !important; }
-.focus\:ring-indigo-300:focus { box-shadow: 0 0 0 4px rgba(165, 180, 252, 0.5) !important; }
-
+.text-red-700 { color: #b91c1c !important; }
 
 .border-gray-200 { border-color: #e5e7eb !important; }
 .border-gray-300 { border-color: #d1d5db !important; }
-.border-gray-400 { border-color: #9ca3af !important; } /* For alert messages */
+.focus\:border-blue-500:focus { border-color: #3b82f6 !important; }
+.focus\:ring-blue-500:focus { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5) !important; }
 
 /* Animations */
 @keyframes fadeIn {
