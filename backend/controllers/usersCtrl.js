@@ -84,7 +84,7 @@ const crypto = require('crypto'); // Import crypto module for generatePasswordRe
           console.log("DEBUG: PDF sent successfully.");
 // >>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
-        } catch (error) {
+       
           console.error("ERROR in generatePdfReport (Puppeteer):", error);
           if (browser) {
             console.log("DEBUG: Closing browser due to error.");
