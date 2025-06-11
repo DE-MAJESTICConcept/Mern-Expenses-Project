@@ -1,37 +1,26 @@
 // src/components/Dashboard/Dashboard.jsx
-import React, { useRef } from 'react'; // Keep useRef for the dashboardRef (even if not used for PDF)
+import React, { useRef } from 'react';
 import TransactionList from '../Transactions/TransactionList';
 import TransactionChart from '../Transactions/TransactionChart';
-import html2canvas from 'html2canvas'; // ! REMOVED: PDF download logic removed
-import jsPDF from 'jspdf'; // ! REMOVED: PDF download logic removed
+// import html2canvas from 'html2canvas'; // ! REMOVED: PDF download logic removed
+// import jsPDF from 'jspdf'; // ! REMOVED: PDF download logic removed
 import { useQuery } from '@tanstack/react-query';
 import { listCategoriesAPI } from '../../services/category/categoryService';
 import { getFinancialSummaryForAdviceAPI } from '../../services/transactions/transactionService';
 import AlertMessage from '../Alert/AlertMessage';
 // import axiosInstance from '../../utils/axiosInstance'; // ! REMOVED: PDF download logic removed (Keep if other parts of Dashboard use it)
 
-// If dashboardRef is not used for PDF, it's not strictly necessary to keep,
-// but for now, we'll keep it as it's part of the structure you provided.
-// const pdfRef = useRef(); // ! REMOVED: No longer needed
-
 const Dashboard = () => {
-  const pdfRef = useRef();
-  const downloadPDF =() => {
-  const input pdfRef.current: 
-  html2canvas(input).then((canvas)=> {
-  const imgData canvas.toDataURL('image/png'); 
-  const pdf new isPDF('p', 'mm', 'a4', true); 
-  const pdfwidth pdf.internal.pageSize.getWidth(); 
-  const pdfHeight pdf.internal.pageSize.getHeight(); 
-  const ingWidth canvas.width; 
-  const imgHeight canvas.height; 
-  const ratio Math.min(pdfWidth/imgWidth, pdfHeight/ingHeight); 
-  const ingx pdfwidth imgWidth ratio)/2; 
-  const imgy= 30; 
-  pdf.addInage(imgData, 'PNG', imgX, imgY, ingWidth ratio, ingHeight ratio); 
-  pdf.save(Dashboard.pdf"); 
+  // Correctly initialize useRef hooks inside the component
+  const dashboardRef = useRef(null);
+  // pdfRef is not strictly needed if download logic is removed, but if you keep it:
+  // const pdfRef = useRef(null); // Initialized correctly inside the component
 
-} );
+  // Placeholder function for the download button
+  const handleDownloadPdfPlaceholder = () => {
+    alert("PDF download feature is currently unavailable or under development.");
+    // Or simply do nothing:
+    // console.log("Download PDF button clicked (functionality removed)");
   };
 
   // Fetch categories data
@@ -55,14 +44,6 @@ const Dashboard = () => {
     queryFn: getFinancialSummaryForAdviceAPI,
     queryKey: ['financial-summary-for-dashboard'],
   });
-
-  // ! REMOVED: handleDownloadPdf function and all its logic are gone.
-  // Instead, the button will simply do nothing or show a message.
-  // const handleDownloadPdfPlaceholder = () => {
-  //   alert("PDF download feature is currently unavailable or under development.");
-  //   // Or simply do nothing:
-  //   // console.log("Download PDF button clicked (functionality removed)");
-  // };
 
   // Calculate total number of categories
   const totalCategories = categoriesData?.length || 0;
@@ -92,14 +73,14 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8" ref=(pdfRef)>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8"> {/* Removed ref=(pdfRef) here */}
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center">Your Financial Dashboard</h1>
 
         <div className="mb-6 flex justify-end">
           <button
             id="downloadButton"
-            onClick={downloadPdf} {/* ! MODIFIED: Call placeholder function */}
+            onClick={handleDownloadPdfPlaceholder} {/* Call the placeholder function */}
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200 ease-in-out transform hover:scale-105"
           >
             Download Dashboard (PDF)
@@ -107,7 +88,6 @@ const Dashboard = () => {
         </div>
 
         {/* This is the content area for your dashboard */}
-        {/* We keep the ref, though its direct use for PDF capture is removed */}
         <div ref={dashboardRef} className="space-y-8 p-4 bg-white rounded-lg shadow-inner">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-lg col-span-full md:col-span-1">
