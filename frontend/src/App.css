@@ -262,37 +262,42 @@ html, body {
 
 /* Send Button */
 .react-chatbot-kit-chat-btn-send {
-    background-color: #376B7E;
+    /* ! MODIFIED: Enhanced styling */
+    background: linear-gradient(145deg, #376B7E, #2a5266); /* Subtle gradient */
+    color: white;
+    border: none; /* Removed border */
     border-radius: 50%;
-    width: 45px;
-    height: 45px;
+    width: 48px; /* Slightly larger */
+    height: 48px; /* Slightly larger */
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.2s;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    font-size: 1.8em; /* Adjusted for icon size */
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 3px rgba(255, 255, 255, 0.2); /* Enhanced shadow */
+    transition: all 0.2s ease-in-out;
     position: static;
     transform: none;
-    cursor: pointer;
     flex-shrink: 0;
 }
 
 .react-chatbot-kit-chat-btn-send:hover {
-    background-color: #2a5266;
-    transform: translateY(-1px) scale(1.05);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    background: linear-gradient(145deg, #2a5266, #376B7E); /* Reverse gradient on hover */
+    transform: translateY(-2px) scale(1.05); /* More pronounced lift */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.2);
 }
 
 .react-chatbot-kit-chat-btn-send:active {
-    transform: translateY(0) scale(0.95);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    transform: translateY(0) scale(0.98); /* Slight squash, but less than before */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+    filter: brightness(0.9); /* Slightly darken on press */
 }
 
 /* Send button icon color */
 .react-chatbot-kit-chat-btn-send svg {
   fill: #ffffff;
-  width: 20px;
-  height: 20px;
+  width: 24px; /* Slightly larger icon */
+  height: 24px; /* Slightly larger icon */
 }
 
 /* Scrollbar Styling (for Webkit browsers) */
