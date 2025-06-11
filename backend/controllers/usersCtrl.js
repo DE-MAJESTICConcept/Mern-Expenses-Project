@@ -1,10 +1,10 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../model/User");
-const sendEmail = require("../utils/emailSender.js");
+const sendEmail = require("../utils/emailService");
 const Transaction = require("../model/Transaction");
-const puppeteer = require('puppeteer-core'); // Use puppeteer-core
-const chrome = require('chrome-aws-lambda'); // Use chrome-aws-lambda
-const crypto = require('crypto'); // Import crypto module for generatePasswordResetToken
+// ! REMOVED: const puppeteer = require('puppeteer-core');
+// ! REMOVED: const chrome = require('chrome-aws-lambda');
+const crypto = require('crypto'); // Keep: Used for password reset token generation
 
 
 const usersController = {
@@ -75,7 +75,7 @@ const usersController = {
 
   //! Change user password
   changeUserPassword: asyncHandler(async (req, res) => {
-    const { newPassword } = req.body; // Only newPassword is needed as per current API
+    const { newPassword } = req.body;
     // Frontend should handle confirm password
     // if (newPassword !== confirmPassword) {
     //   res.status(400);
@@ -100,7 +100,7 @@ const usersController = {
 
     if (!user) {
       res.status(404);
-      throw new Error("User not found"); // ! FIX: Corrected from "new new Error"
+      throw new Error("User not found");
     }
 
     user.username = username || user.username;
@@ -131,7 +131,7 @@ const usersController = {
       await sendEmail(user.email, 'Password Reset Token', message);
       res.status(200).json({ message: 'Token sent to email!' });
     } catch (err) {
-      console.error("Error sending password reset email:", err); // Added specific logging
+      console.error("Error sending password reset email:", err);
       user.passwordResetToken = undefined;
       user.passwordResetExpires = undefined;
       await user.save({ validateBeforeSave: false });
@@ -163,7 +163,7 @@ const usersController = {
     res.status(200).json({ message: 'Password has been reset!' });
   }),
 
-  //! Send Spending Report to Email
+  //! Send Spending Report to Email (Keeping this as it's an email feature, not a 'download')
   sendSpendingReport: asyncHandler(async (req, res) => {
     const userId = req.user;
     const user = await User.findById(userId);
@@ -217,72 +217,10 @@ const usersController = {
     }
   }),
 
-  //! Generate PDF Report from HTML content received from frontend
-  generatePdfReport: asyncHandler(async (req, res) => {
-    console.log("DEBUG: generatePdfReport controller started.");
-    const { htmlContent } = req.body;
-    const userId = req.user;
-    const user = await User.findById(userId);
-
-    if (!user) {
-      console.error("ERROR: User not found for PDF generation.");
-      res.status(404);
-      throw new Error("User not found.");
-    }
-
-    if (!htmlContent) {
-      console.error("ERROR: No HTML content provided for PDF generation.");
-      res.status(400);
-      throw new Error("No HTML content provided for PDF generation.");
-    }
-
-    let browser;
-    try {
-      console.log("DEBUG: Launching Puppeteer browser...");
-      browser = await puppeteer.launch({
-        args: chrome.args,
-        executablePath: await chrome.executablePath,
-        headless: chrome.headless,
-      });
-      const page = await browser.newPage();
-      console.log("DEBUG: Puppeteer browser launched, new page created.");
-
-      await page.setContent(htmlContent, {
-        waitUntil: 'networkidle0'
-      });
-      console.log("DEBUG: Page content set, waiting for network idle.");
-
-      const pdfBuffer = await page.pdf({
-        format: 'A4',
-        printBackground: true,
-        margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' }
-      });
-      console.log("DEBUG: PDF buffer generated.");
-
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename=financial-dashboard-report-${Date.now()}.pdf`);
-      res.send(pdfBuffer);
-      console.log("DEBUG: PDF sent successfully.");
-
-    } catch (error) {
-      console.error("ERROR in generatePdfReport (Puppeteer):", error);
-      if (browser) {
-        console.log("DEBUG: Closing browser due to error.");
-        await browser.close();
-      }
-      res.status(500);
-      throw new Error("Failed to generate PDF report on the server: " + error.message);
-    } finally {
-      if (browser) {
-        console.log("DEBUG: Ensuring browser is closed in finally block.");
-        await browser.close();
-      }
-    }
-  }),
+  // ! REMOVED: generatePdfReport function and all its associated logic (Puppeteer)
 };
 
 module.exports = usersController;
-
 
 
 // // src/controllers/usersCtrl.js
