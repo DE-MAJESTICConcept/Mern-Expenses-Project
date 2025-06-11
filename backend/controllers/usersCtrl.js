@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../model/User");
-const sendEmail = require("../utils/emailService");
+const sendEmail = require("../utils/emailSender.js");
 const Transaction = require("../model/Transaction");
 const puppeteer = require('puppeteer-core'); // ! MODIFIED: Use puppeteer-core
 const chrome = require('chrome-aws-lambda'); // ! MODIFIED: Use chrome-aws-lambda
