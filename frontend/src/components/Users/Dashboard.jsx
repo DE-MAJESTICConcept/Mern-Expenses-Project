@@ -17,20 +17,19 @@ import AlertMessage from '../Alert/AlertMessage';
 const Dashboard = () => {
   const pdfRef = useRef();
   const downloadPDF =() => {
-const input pdfRef.current: 
-html2canvas(input).then((canvas)=> {
-const imgData canvas.toDataURL('image/png'); 
-const pdf new isPDF('p', 'mm', 'a4', true); 
-const pdfwidth pdf.internal.pageSize.getWidth(); 
-const pdfHeight pdf.internal.pageSize.getHeight(); 
-const ingWidth canvas.width; 
-JS 
-const imgHeight canvas.height; 
-const ratio Math.min(pdfWidth/imgWidth, pdfHeight/ingHeight); 
-const ingx pdfwidth imgWidth ratio)/2; 
-const imgy= 30; 
-pdf.addInage(imgData, 'PNG', imgX, imgY, ingWidth ratio, ingHeight ratio); 
-pdf.save(Dashboard.pdf"); 
+  const input pdfRef.current: 
+  html2canvas(input).then((canvas)=> {
+  const imgData canvas.toDataURL('image/png'); 
+  const pdf new isPDF('p', 'mm', 'a4', true); 
+  const pdfwidth pdf.internal.pageSize.getWidth(); 
+  const pdfHeight pdf.internal.pageSize.getHeight(); 
+  const ingWidth canvas.width; 
+  const imgHeight canvas.height; 
+  const ratio Math.min(pdfWidth/imgWidth, pdfHeight/ingHeight); 
+  const ingx pdfwidth imgWidth ratio)/2; 
+  const imgy= 30; 
+  pdf.addInage(imgData, 'PNG', imgX, imgY, ingWidth ratio, ingHeight ratio); 
+  pdf.save(Dashboard.pdf"); 
 
 } );
   };
