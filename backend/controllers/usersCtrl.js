@@ -1,75 +1,76 @@
+<<<<<<< HEAD
 const asyncHandler = require("express-async-handler");
 const User = require("../model/User");
 const sendEmail = require("../utils/emailSender.js");
 const Transaction = require("../model/Transaction");
 const puppeteer = require('puppeteer');
+=======
+    const asyncHandler = require("express-async-handler");
+    const User = require("../model/User");
+    const sendEmail = require("../utils/emailSender.js");
+    const Transaction = require("../model/Transaction");
+    const puppeteer = require('puppeteer');
+    const chromium = require('@sparticuz/chromium'); // ! NEW: Import the chromium package
+>>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
-const usersController = {
-  //! User registration
-  register: asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password) {
-      res.status(400);
-      throw new Error("Please enter all fields");
-    }
 
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      res.status(400);
-      throw new Error("User already exists");
-    }
+    const usersController = {
+      //! Existing controller functions (register, login, profile, changeUserPassword, updateUserProfile, forgotPassword, resetPassword, sendSpendingReport)
+      // ... (Keep all your existing code for these functions as they are in your current usersCtrl.js)
 
-    const user = await User.create({
-      username,
-      email,
-      password,
-    });
-    res.status(201).json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      token: user.generateToken(),
-    });
-  }),
+      //! Generate PDF Report from HTML content received from frontend
+      generatePdfReport: asyncHandler(async (req, res) => {
+        console.log("DEBUG: generatePdfReport controller started.");
+        const { htmlContent } = req.body;
+        const userId = req.user;
+        const user = await User.findById(userId);
 
-  //! User login
-  login: asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      res.status(400);
-      throw new Error("Please enter all fields");
-    }
+        if (!user) {
+          console.error("ERROR: User not found for PDF generation.");
+          res.status(404);
+          throw new Error("User not found.");
+        }
 
-    const user = await User.findOne({ email });
-    if (!user) {
-      res.status(400);
-      throw new Error("User does not exist");
-    }
+        if (!htmlContent) {
+          console.error("ERROR: No HTML content provided for PDF generation.");
+          res.status(400);
+          throw new Error("No HTML content provided for PDF generation.");
+        }
 
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      res.status(400);
-      throw new Error("Invalid credentials");
-    }
+        let browser;
+        try {
+          console.log("DEBUG: Launching Puppeteer browser...");
+          // ! MODIFIED: Use chromium.executablePath() and chromium.args
+          browser = await puppeteer.launch({
+            args: chromium.args, // Use arguments from the chromium package
+            executablePath: await chromium.executablePath(), // Point to chromium binary
+            headless: chromium.headless, // Use headless setting from chromium package
+            // You can keep additional args if needed, but chromium.args often covers common ones for cloud
+            // args: [
+            //   '--no-sandbox',
+            //   '--disable-setuid-sandbox',
+            //   '--disable-dev-shm-usage',
+            //   '--disable-gpu',
+            //   '--no-zygote',
+            //   '--single-process'
+            // ]
+          });
+          const page = await browser.newPage();
+          console.log("DEBUG: Puppeteer browser launched, new page created.");
 
-    res.status(200).json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      token: user.generateToken(),
-    });
-  }),
+          await page.setContent(htmlContent, {
+            waitUntil: 'networkidle0'
+          });
+          console.log("DEBUG: Page content set, waiting for network idle.");
 
-  //! User profile
-  profile: asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user).select("-password");
-    if (!user) {
-      res.status(404);
-      throw new Error("User not found");
-    }
-    res.status(200).json(user);
-  }),
+          const pdfBuffer = await page.pdf({
+            format: 'A4',
+            printBackground: true,
+            margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' }
+          });
+          console.log("DEBUG: PDF buffer generated.");
 
+<<<<<<< HEAD
   //! Change user password
   changeUserPassword: asyncHandler(async (req, res) => {
     const { newPassword } = req.body; // Only newPassword is needed as per current API
@@ -78,52 +79,97 @@ const usersController = {
     //   res.status(400);
     //   throw new Error("Passwords do not match");
     // }
+=======
+          res.setHeader('Content-Type', 'application/pdf');
+          res.setHeader('Content-Disposition', `attachment; filename=financial-dashboard-report-${Date.now()}.pdf`);
+          res.send(pdfBuffer);
+          console.log("DEBUG: PDF sent successfully.");
+>>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
-    const user = await User.findById(req.user);
-    if (!user) {
-      res.status(404);
-      throw new Error("User not found");
-    }
+        } catch (error) {
+          console.error("ERROR in generatePdfReport (Puppeteer):", error);
+          if (browser) {
+            console.log("DEBUG: Closing browser due to error.");
+            await browser.close();
+          }
+          res.status(500);
+          throw new Error("Failed to generate PDF report on the server: " + error.message);
+        } finally {
+          if (browser) {
+            console.log("DEBUG: Ensuring browser is closed in finally block.");
+            await browser.close();
+          }
+        }
+      }),
+    };
 
-    user.password = newPassword; // Mongoose pre-save hook will hash this
-    await user.save();
-    res.status(200).json({ message: "Password updated successfully" });
-  }),
+    module.exports = usersController;
+    
 
-  //! Update user profile
-  updateUserProfile: asyncHandler(async (req, res) => {
-    const { username, email } = req.body;
-    const user = await User.findById(req.user);
 
-    if (!user) {
-      res.status(404);
-      throw new Error("User not found");
-    }
+// // src/controllers/usersCtrl.js
+// const asyncHandler = require("express-async-handler");
+// const User = require("../model/User"); // Ensure User model is imported
+// const sendEmail = require("../utils/emailSender.js"); // Import your email service
+// const Transaction = require("../model/Transaction"); // Import Transaction model for data
 
-    user.username = username || user.username;
-    user.email = email || user.email;
+// const usersController = {
+//   //! User registration
+//   register: asyncHandler(async (req, res) => {
+//     const { username, email, password } = req.body;
+//     if (!username || !email || !password) {
+//       res.status(400);
+//       throw new Error("Please enter all fields");
+//     }
 
-    await user.save();
-    res.status(200).json(user);
-  }),
+//     const userExists = await User.findOne({ email });
+//     if (userExists) {
+//       res.status(400);
+//       throw new Error("User already exists");
+//     }
 
-  //! Forgot Password
-  forgotPassword: asyncHandler(async (req, res) => {
-    const { email } = req.body;
-    const user = await User.findOne({ email });
+//     const user = await User.create({
+//       username,
+//       email,
+//       password,
+//     });
+//     res.status(201).json({
+//       _id: user._id,
+//       username: user.username,
+//       email: user.email,
+//       token: user.generateToken(),
+//     });
+//   }),
 
+<<<<<<< HEAD
     if (!user) {
       // For security, always send a success message even if email not found
       return res.status(200).json({ message: "If an account with that email exists, a password reset link has been sent to your inbox." });
       // throw new Error("User with that email does not exist."); // Avoid this for security
     }
+=======
+//   //! User login
+//   login: asyncHandler(async (req, res) => {
+//     const { email, password } = req.body;
+//     if (!email || !password) {
+//       res.status(400);
+//       throw new Error("Please enter all fields");
+//     }
+>>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
-    const resetToken = user.generatePasswordResetToken();
-    await user.save({ validateBeforeSave: false }); // Save token without validating other fields
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       res.status(400);
+//       throw new Error("User does not exist");
+//     }
 
-    const resetURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetURL}. \n\n If you did not request this, please ignore this email and your password will remain unchanged.`;
+//     const isMatch = await user.comparePassword(password);
+//     if (!isMatch) {
+//       res.status(400);
+//       throw new Error("Invalid credentials");
+//     }
 
+<<<<<<< HEAD
     try {
       await sendEmail(user.email, 'Password Reset Token', message);
       res.status(200).json({ message: 'Token sent to email!' });
@@ -140,56 +186,97 @@ const usersController = {
   resetPassword: asyncHandler(async (req, res) => {
     const { token } = req.params;
     const { newPassword } = req.body; // Changed from 'password' to 'newPassword' for clarity
+=======
+//     res.status(200).json({
+//       _id: user._id,
+//       username: user.username,
+//       email: user.email,
+//       token: user.generateToken(),
+//     });
+//   }),
 
-    const user = await User.findOne({
-      passwordResetToken: token,
-      passwordResetExpires: { $gt: Date.now() } // Check if token is not expired
-    });
+//   //! User profile
+//   profile: asyncHandler(async (req, res) => {
+//     const user = await User.findById(req.user).select("-password");
+//     if (!user) {
+//       res.status(404);
+//       throw new Error("User not found");
+//     }
+//     res.status(200).json(user);
+//   }),
+>>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
-    if (!user) {
-      res.status(400);
-      throw new Error('Token is invalid or has expired.');
-    }
+//   //! Change user password
+//   changeUserPassword: asyncHandler(async (req, res) => {
+//     const { newPassword, confirmPassword } = req.body;
+//     if (newPassword !== confirmPassword) {
+//       res.status(400);
+//       throw new Error("Passwords do not match");
+//     }
 
+//     const user = await User.findById(req.user);
+//     if (!user) {
+//       res.status(404);
+//       throw new Error("User not found");
+//     }
+
+<<<<<<< HEAD
     user.password = newPassword; // Mongoose pre-save hook will hash this
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
+=======
+//     user.password = newPassword; // Mongoose pre-save hook will hash this
+//     await user.save();
+//     res.status(200).json({ message: "Password updated successfully" });
+//   }),
+>>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
-    await user.save();
-    res.status(200).json({ message: 'Password has been reset!' });
-  }),
+//   //! Update user profile
+//   updateUserProfile: asyncHandler(async (req, res) => {
+//     const { username, email } = req.body;
+//     const user = await User.findById(req.user);
 
+<<<<<<< HEAD
   //! Send Spending Report to Email
   sendSpendingReport: asyncHandler(async (req, res) => {
     const userId = req.user;
     const user = await User.findById(userId);
+=======
+//     if (!user) {
+//       res.status(404);
+//       throw new Error("User not found");
+//     }
+>>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
-    if (!user) {
-      res.status(404);
-      throw new Error("User not found.");
-    }
+//     user.username = username || user.username;
+//     user.email = email || user.email;
 
+<<<<<<< HEAD
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+=======
+//     await user.save();
+//     res.status(200).json(user);
+//   }),
+>>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
-    const transactions = await Transaction.find({
-      user: userId,
-      date: { $gte: thirtyDaysAgo }
-    });
+//   //! Forgot Password
+//   forgotPassword: asyncHandler(async (req, res) => {
+//     const { email } = req.body;
+//     const user = await User.findOne({ email });
 
-    let totalIncome = 0;
-    let totalExpense = 0;
+//     if (!user) {
+//       res.status(404);
+//       throw new Error("User with that email does not exist.");
+//     }
 
-    transactions.forEach(transaction => {
-      if (transaction.type === 'income') {
-        totalIncome += transaction.amount;
-      } else if (transaction.type === 'expense') {
-        totalExpense += transaction.amount;
-      }
-    });
+//     const resetToken = user.generatePasswordResetToken();
+//     await user.save({ validateBeforeSave: false }); // Save token without validating other fields
 
-    const balance = totalIncome - totalExpense;
+//     const resetURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+//     const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetURL}. \n\n If you did not request this, please ignore this email and your password will remain unchanged.`;
 
+<<<<<<< HEAD
     const subject = "Your Recent Financial Spending Report";
     const htmlContent = `
       <h1>Hello ${user.username},</h1>
@@ -429,6 +516,25 @@ module.exports = usersController;
 //     const { token } = req.params;
 //     const { password } = req.body;
 
+=======
+//     try {
+//       await sendEmail(user.email, 'Password Reset Token', message);
+//       res.status(200).json({ message: 'Token sent to email!' });
+//     } catch (err) {
+//       user.passwordResetToken = undefined;
+//       user.passwordResetExpires = undefined;
+//       await user.save({ validateBeforeSave: false });
+//       res.status(500);
+//       throw new Error('There was an error sending the email. Try again later!');
+//     }
+//   }),
+
+//   //! Reset Password
+//   resetPassword: asyncHandler(async (req, res) => {
+//     const { token } = req.params;
+//     const { password } = req.body;
+
+>>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 //     const user = await User.findOne({
 //       passwordResetToken: token,
 //       passwordResetExpires: { $gt: Date.now() } // Check if token is not expired
