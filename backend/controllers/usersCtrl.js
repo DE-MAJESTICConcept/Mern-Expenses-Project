@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const User = require("../model/User");
 const sendEmail = require("../utils/emailSender.js");
 const Transaction = require("../model/Transaction");
+<<<<<<< HEAD
 const puppeteer = require('puppeteer');
 
     const asyncHandler = require("express-async-handler");
@@ -11,6 +12,11 @@ const puppeteer = require('puppeteer');
     const Transaction = require("../model/Transaction");
     const puppeteer = require('puppeteer');
     const chromium = require('@sparticuz/chromium'); // ! NEW: Import the chromium package
+=======
+const puppeteer = require('puppeteer-core'); // ! MODIFIED: Use puppeteer-core
+const chrome = require('chrome-aws-lambda'); // ! MODIFIED: Use chrome-aws-lambda
+const crypto = require('crypto'); // Import crypto module for generatePasswordResetToken
+>>>>>>> e22f18ad3fad0588310aedee33c26475fd184508
 
 
 
@@ -107,11 +113,18 @@ const puppeteer = require('puppeteer');
     
 
 
+<<<<<<< HEAD
 // // src/controllers/usersCtrl.js
 // const asyncHandler = require("express-async-handler");
 // const User = require("../model/User"); // Ensure User model is imported
 // const sendEmail = require("../utils/emailSender.js"); // Import your email service
 // const Transaction = require("../model/Transaction"); // Import Transaction model for data
+=======
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found"); // ! FIX: Removed 'new new'
+    }
+>>>>>>> e22f18ad3fad0588310aedee33c26475fd184508
 
 // const usersController = {
 //   //! User registration
@@ -163,11 +176,16 @@ const puppeteer = require('puppeteer');
 //       throw new Error("User does not exist");
 //     }
 
+<<<<<<< HEAD
 //     const isMatch = await user.comparePassword(password);
 //     if (!isMatch) {
 //       res.status(400);
 //       throw new Error("Invalid credentials");
 //     }
+=======
+    const resetURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetURL}. \n\n If you did not request this, please ignore this email and your password will remain unchanged.`;
+>>>>>>> e22f18ad3fad0588310aedee33c26475fd184508
 
 <<<<<<< HEAD
     try {
@@ -322,6 +340,7 @@ const puppeteer = require('puppeteer');
     let browser;
     try {
       console.log("DEBUG: Launching Puppeteer browser...");
+<<<<<<< HEAD
       // Add more args for Render stability:
       browser = await puppeteer.launch({
         headless: true,
@@ -333,6 +352,14 @@ const puppeteer = require('puppeteer');
           '--no-zygote', // Helps with stability
           '--single-process' // Helps with memory on some setups
         ]
+=======
+      // ! MODIFIED: Use chrome-aws-lambda for args, executablePath, and headless
+      browser = await puppeteer.launch({
+        args: chrome.args, // Use arguments from chrome-aws-lambda
+        executablePath: await chrome.executablePath, // Point to chrome-aws-lambda's bundled Chromium
+        headless: chrome.headless, // Use headless setting from chrome-aws-lambda
+        // incognito: true, // Optional: Launch in incognito mode
+>>>>>>> e22f18ad3fad0588310aedee33c26475fd184508
       });
       const page = await browser.newPage();
       console.log("DEBUG: Puppeteer browser launched, new page created.");
@@ -372,7 +399,6 @@ const puppeteer = require('puppeteer');
 };
 
 module.exports = usersController;
-
 
 
 // // src/controllers/usersCtrl.js
