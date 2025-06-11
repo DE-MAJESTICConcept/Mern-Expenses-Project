@@ -1,10 +1,10 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../model/User");
-const sendEmail = require("../utils/emailSender.js");
+const sendEmail = require("../utils/emailService");
 const Transaction = require("../model/Transaction");
-const puppeteer = require('puppeteer');
-const chromium = require('@sparticuz/chromium'); // Import the chromium package
-const crypto = require('crypto'); // ! NEW: Import crypto module for generatePasswordResetToken
+const puppeteer = require('puppeteer-core'); // ! MODIFIED: Use puppeteer-core
+const chrome = require('chrome-aws-lambda'); // ! MODIFIED: Use chrome-aws-lambda
+const crypto = require('crypto'); // Import crypto module for generatePasswordResetToken
 
 
 const usersController = {
@@ -100,7 +100,7 @@ const usersController = {
 
     if (!user) {
       res.status(404);
-      throw new new Error("User not found");
+      throw new Error("User not found"); // ! FIX: Removed 'new new'
     }
 
     user.username = username || user.username;
@@ -125,7 +125,6 @@ const usersController = {
     await user.save({ validateBeforeSave: false }); // Save token without validating other fields
 
     const resetURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-    // ! FIX: Added backticks around the message string
     const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetURL}. \n\n If you did not request this, please ignore this email and your password will remain unchanged.`;
 
     try {
@@ -240,10 +239,12 @@ const usersController = {
     let browser;
     try {
       console.log("DEBUG: Launching Puppeteer browser...");
+      // ! MODIFIED: Use chrome-aws-lambda for args, executablePath, and headless
       browser = await puppeteer.launch({
-        args: chromium.args,
-        executablePath: await chromium.executablePath(),
-        headless: chromium.headless,
+        args: chrome.args, // Use arguments from chrome-aws-lambda
+        executablePath: await chrome.executablePath, // Point to chrome-aws-lambda's bundled Chromium
+        headless: chrome.headless, // Use headless setting from chrome-aws-lambda
+        // incognito: true, // Optional: Launch in incognito mode
       });
       const page = await browser.newPage();
       console.log("DEBUG: Puppeteer browser launched, new page created.");
@@ -283,7 +284,6 @@ const usersController = {
 };
 
 module.exports = usersController;
-
 
 
 // // src/controllers/usersCtrl.js
