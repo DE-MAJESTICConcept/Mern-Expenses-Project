@@ -3,7 +3,6 @@ const asyncHandler = require("express-async-handler");
 const User = require("../model/User");
 const sendEmail = require("../utils/emailSender.js");
 const Transaction = require("../model/Transaction");
-<<<<<<< HEAD
 const puppeteer = require('puppeteer');
 
     const asyncHandler = require("express-async-handler");
@@ -12,11 +11,10 @@ const puppeteer = require('puppeteer');
     const Transaction = require("../model/Transaction");
     const puppeteer = require('puppeteer');
     const chromium = require('@sparticuz/chromium'); // ! NEW: Import the chromium package
-=======
 const puppeteer = require('puppeteer-core'); // ! MODIFIED: Use puppeteer-core
 const chrome = require('chrome-aws-lambda'); // ! MODIFIED: Use chrome-aws-lambda
 const crypto = require('crypto'); // Import crypto module for generatePasswordResetToken
->>>>>>> e22f18ad3fad0588310aedee33c26475fd184508
+
 
 
 
@@ -113,18 +111,17 @@ const crypto = require('crypto'); // Import crypto module for generatePasswordRe
     
 
 
-<<<<<<< HEAD
 // // src/controllers/usersCtrl.js
 // const asyncHandler = require("express-async-handler");
 // const User = require("../model/User"); // Ensure User model is imported
 // const sendEmail = require("../utils/emailSender.js"); // Import your email service
 // const Transaction = require("../model/Transaction"); // Import Transaction model for data
-=======
-    if (!user) {
-      res.status(404);
-      throw new Error("User not found"); // ! FIX: Removed 'new new'
-    }
->>>>>>> e22f18ad3fad0588310aedee33c26475fd184508
+// =======
+//     if (!user) {
+//       res.status(404);
+//       throw new Error("User not found"); // ! FIX: Removed 'new new'
+//     }
+// >>>>>>> e22f18ad3fad0588310aedee33c26475fd184508
 
 // const usersController = {
 //   //! User registration
@@ -155,11 +152,11 @@ const crypto = require('crypto'); // Import crypto module for generatePasswordRe
 //   }),
 
 // <<<<<<< HEAD
-    if (!user) {
+    // if (!user) {
       // For security, always send a success message even if email not found
-      return res.status(200).json({ message: "If an account with that email exists, a password reset link has been sent to your inbox." });
+      // return res.status(200).json({ message: "If an account with that email exists, a password reset link has been sent to your inbox." });
       // throw new Error("User with that email does not exist."); // Avoid this for security
-    }
+    // }
 // =======
 //   //! User login
 //   login: asyncHandler(async (req, res) => {
@@ -168,7 +165,7 @@ const crypto = require('crypto'); // Import crypto module for generatePasswordRe
 //       res.status(400);
 //       throw new Error("Please enter all fields");
 //     }
->>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
+// >>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
 //     const user = await User.findOne({ email });
 //     if (!user) {
@@ -176,35 +173,35 @@ const crypto = require('crypto'); // Import crypto module for generatePasswordRe
 //       throw new Error("User does not exist");
 //     }
 
-<<<<<<< HEAD
+// <<<<<<< HEAD
 //     const isMatch = await user.comparePassword(password);
 //     if (!isMatch) {
 //       res.status(400);
 //       throw new Error("Invalid credentials");
+// //     }
+// // =======
+//     const resetURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+//     const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetURL}. \n\n If you did not request this, please ignore this email and your password will remain unchanged.`;
+// >>>>>>> e22f18ad3fad0588310aedee33c26475fd184508
+
+// <<<<<<< HEAD
+//     try {
+//       await sendEmail(user.email, 'Password Reset Token', message);
+//       res.status(200).json({ message: 'Token sent to email!' });
+//     } catch (emailError) {
+//       user.passwordResetToken = undefined;
+//       user.passwordResetExpires = undefined;
+//       await user.save({ validateBeforeSave: false });
+//       res.status(500);
+//       throw new Error('There was an error sending the email. Try again later!');
 //     }
-=======
-    const resetURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetURL}. \n\n If you did not request this, please ignore this email and your password will remain unchanged.`;
->>>>>>> e22f18ad3fad0588310aedee33c26475fd184508
+//   }),
 
-<<<<<<< HEAD
-    try {
-      await sendEmail(user.email, 'Password Reset Token', message);
-      res.status(200).json({ message: 'Token sent to email!' });
-    } catch (emailError) {
-      user.passwordResetToken = undefined;
-      user.passwordResetExpires = undefined;
-      await user.save({ validateBeforeSave: false });
-      res.status(500);
-      throw new Error('There was an error sending the email. Try again later!');
-    }
-  }),
-
-  //! Reset Password
-  resetPassword: asyncHandler(async (req, res) => {
-    const { token } = req.params;
-    const { newPassword } = req.body; // Changed from 'password' to 'newPassword' for clarity
-=======
+//   //! Reset Password
+//   resetPassword: asyncHandler(async (req, res) => {
+//     const { token } = req.params;
+//     const { newPassword } = req.body; // Changed from 'password' to 'newPassword' for clarity
+// =======
 //     res.status(200).json({
 //       _id: user._id,
 //       username: user.username,
@@ -222,7 +219,7 @@ const crypto = require('crypto'); // Import crypto module for generatePasswordRe
 //     }
 //     res.status(200).json(user);
 //   }),
->>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
+// >>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
 //   //! Change user password
 //   changeUserPassword: asyncHandler(async (req, res) => {
@@ -238,45 +235,45 @@ const crypto = require('crypto'); // Import crypto module for generatePasswordRe
 //       throw new Error("User not found");
 //     }
 
-<<<<<<< HEAD
-    user.password = newPassword; // Mongoose pre-save hook will hash this
-    user.passwordResetToken = undefined;
-    user.passwordResetExpires = undefined;
-=======
+// <<<<<<< HEAD
+//     user.password = newPassword; // Mongoose pre-save hook will hash this
+//     user.passwordResetToken = undefined;
+//     user.passwordResetExpires = undefined;
+// =======
 //     user.password = newPassword; // Mongoose pre-save hook will hash this
 //     await user.save();
 //     res.status(200).json({ message: "Password updated successfully" });
 //   }),
->>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
+// >>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
 //   //! Update user profile
 //   updateUserProfile: asyncHandler(async (req, res) => {
 //     const { username, email } = req.body;
 //     const user = await User.findById(req.user);
 
-<<<<<<< HEAD
-  //! Send Spending Report to Email
-  sendSpendingReport: asyncHandler(async (req, res) => {
-    const userId = req.user;
-    const user = await User.findById(userId);
-=======
+// <<<<<<< HEAD
+//   //! Send Spending Report to Email
+//   sendSpendingReport: asyncHandler(async (req, res) => {
+//     const userId = req.user;
+//     const user = await User.findById(userId);
+// =======
 //     if (!user) {
 //       res.status(404);
 //       throw new Error("User not found");
 //     }
->>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
+// >>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
 //     user.username = username || user.username;
 //     user.email = email || user.email;
 
-<<<<<<< HEAD
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-=======
+// <<<<<<< HEAD
+    // const thirtyDaysAgo = new Date();
+    // thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+// =======
 //     await user.save();
 //     res.status(200).json(user);
 //   }),
->>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
+// >>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
 //   //! Forgot Password
 //   forgotPassword: asyncHandler(async (req, res) => {
@@ -294,111 +291,111 @@ const crypto = require('crypto'); // Import crypto module for generatePasswordRe
 //     const resetURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 //     const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetURL}. \n\n If you did not request this, please ignore this email and your password will remain unchanged.`;
 
-<<<<<<< HEAD
-    const subject = "Your Recent Financial Spending Report";
-    const htmlContent = `
-      <h1>Hello ${user.username},</h1>
-      <p>Here is a summary of your financial activity for the last 30 days:</p>
-      <ul>
-        <li><strong>Total Income:</strong> $${totalIncome.toFixed(2)}</li>
-        <li><strong>Total Expenses:</strong> $${totalExpense.toFixed(2)}</li>
-        <li><strong>Net Balance:</strong> $${balance.toFixed(2)}</li>
-      </ul>
-      <p>Keep up the great work tracking your finances!</p>
-      <p>Best regards,<br/>Your DE-MAJESTIC Financial Assistant</p>
-    `;
+// <<<<<<< HEAD
+//     const subject = "Your Recent Financial Spending Report";
+//     const htmlContent = `
+//       <h1>Hello ${user.username},</h1>
+//       <p>Here is a summary of your financial activity for the last 30 days:</p>
+//       <ul>
+//         <li><strong>Total Income:</strong> $${totalIncome.toFixed(2)}</li>
+//         <li><strong>Total Expenses:</strong> $${totalExpense.toFixed(2)}</li>
+//         <li><strong>Net Balance:</strong> $${balance.toFixed(2)}</li>
+//       </ul>
+//       <p>Keep up the great work tracking your finances!</p>
+//       <p>Best regards,<br/>Your DE-MAJESTIC Financial Assistant</p>
+//     `;
 
-    try {
-      await sendEmail(user.email, subject, htmlContent);
-      res.status(200).json({ message: "Financial report sent to your email!" });
-    } catch (emailError) {
-      console.error("Error sending financial report email:", emailError);
-      res.status(500);
-      throw new Error("Failed to send financial report email.");
-    }
-  }),
+//     try {
+//       await sendEmail(user.email, subject, htmlContent);
+//       res.status(200).json({ message: "Financial report sent to your email!" });
+//     } catch (emailError) {
+//       console.error("Error sending financial report email:", emailError);
+//       res.status(500);
+//       throw new Error("Failed to send financial report email.");
+//     }
+//   }),
 
-  //! Generate PDF Report from HTML content received from frontend
-  generatePdfReport: asyncHandler(async (req, res) => {
-    console.log("DEBUG: generatePdfReport controller started.");
-    const { htmlContent } = req.body;
-    const userId = req.user;
-    const user = await User.findById(userId);
+//   //! Generate PDF Report from HTML content received from frontend
+//   generatePdfReport: asyncHandler(async (req, res) => {
+//     console.log("DEBUG: generatePdfReport controller started.");
+//     const { htmlContent } = req.body;
+//     const userId = req.user;
+//     const user = await User.findById(userId);
 
-    if (!user) {
-      console.error("ERROR: User not found for PDF generation.");
-      res.status(404);
-      throw new Error("User not found.");
-    }
+//     if (!user) {
+//       console.error("ERROR: User not found for PDF generation.");
+//       res.status(404);
+//       throw new Error("User not found.");
+//     }
 
-    if (!htmlContent) {
-      console.error("ERROR: No HTML content provided for PDF generation.");
-      res.status(400);
-      throw new Error("No HTML content provided for PDF generation.");
-    }
+//     if (!htmlContent) {
+//       console.error("ERROR: No HTML content provided for PDF generation.");
+//       res.status(400);
+//       throw new Error("No HTML content provided for PDF generation.");
+//     }
 
-    let browser;
-    try {
-      console.log("DEBUG: Launching Puppeteer browser...");
-<<<<<<< HEAD
+//     let browser;
+//     try {
+//       console.log("DEBUG: Launching Puppeteer browser...");
+// <<<<<<< HEAD
       // Add more args for Render stability:
-      browser = await puppeteer.launch({
-        headless: true,
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage', // Recommended for Docker/Render environments
-          '--disable-gpu', // Recommended for environments without dedicated GPU
-          '--no-zygote', // Helps with stability
-          '--single-process' // Helps with memory on some setups
-        ]
-=======
-      // ! MODIFIED: Use chrome-aws-lambda for args, executablePath, and headless
-      browser = await puppeteer.launch({
-        args: chrome.args, // Use arguments from chrome-aws-lambda
-        executablePath: await chrome.executablePath, // Point to chrome-aws-lambda's bundled Chromium
-        headless: chrome.headless, // Use headless setting from chrome-aws-lambda
-        // incognito: true, // Optional: Launch in incognito mode
->>>>>>> e22f18ad3fad0588310aedee33c26475fd184508
-      });
-      const page = await browser.newPage();
-      console.log("DEBUG: Puppeteer browser launched, new page created.");
+//       browser = await puppeteer.launch({
+//         headless: true,
+//         args: [
+//           '--no-sandbox',
+//           '--disable-setuid-sandbox',
+//           '--disable-dev-shm-usage', // Recommended for Docker/Render environments
+//           '--disable-gpu', // Recommended for environments without dedicated GPU
+//           '--no-zygote', // Helps with stability
+//           '--single-process' // Helps with memory on some setups
+//         ]
+// =======
+//       // ! MODIFIED: Use chrome-aws-lambda for args, executablePath, and headless
+//       browser = await puppeteer.launch({
+//         args: chrome.args, // Use arguments from chrome-aws-lambda
+//         executablePath: await chrome.executablePath, // Point to chrome-aws-lambda's bundled Chromium
+//         headless: chrome.headless, // Use headless setting from chrome-aws-lambda
+//         // incognito: true, // Optional: Launch in incognito mode
+// >>>>>>> e22f18ad3fad0588310aedee33c26475fd184508
+//       });
+//       const page = await browser.newPage();
+//       console.log("DEBUG: Puppeteer browser launched, new page created.");
 
-      await page.setContent(htmlContent, {
-        waitUntil: 'networkidle0' // Wait until network activity is idle on the page
-      });
-      console.log("DEBUG: Page content set, waiting for network idle.");
+//       await page.setContent(htmlContent, {
+//         waitUntil: 'networkidle0' // Wait until network activity is idle on the page
+//       });
+//       console.log("DEBUG: Page content set, waiting for network idle.");
 
-      const pdfBuffer = await page.pdf({
-        format: 'A4',
-        printBackground: true, // Crucial for background colors/images
-        margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' }
-      });
-      console.log("DEBUG: PDF buffer generated.");
+//       const pdfBuffer = await page.pdf({
+//         format: 'A4',
+//         printBackground: true, // Crucial for background colors/images
+//         margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' }
+//       });
+//       console.log("DEBUG: PDF buffer generated.");
 
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename=financial-dashboard-report-${Date.now()}.pdf`);
-      res.send(pdfBuffer);
-      console.log("DEBUG: PDF sent successfully.");
+//       res.setHeader('Content-Type', 'application/pdf');
+//       res.setHeader('Content-Disposition', `attachment; filename=financial-dashboard-report-${Date.now()}.pdf`);
+//       res.send(pdfBuffer);
+//       console.log("DEBUG: PDF sent successfully.");
 
-    } catch (error) {
-      console.error("ERROR in generatePdfReport (Puppeteer):", error);
-      if (browser) {
-        console.log("DEBUG: Closing browser due to error.");
-        await browser.close();
-      }
-      res.status(500);
-      throw new Error("Failed to generate PDF report on the server: " + error.message); // Send more specific error
-    } finally {
-      if (browser) {
-        console.log("DEBUG: Ensuring browser is closed in finally block.");
-        await browser.close(); // Ensure browser is closed
-      }
-    }
-  }),
-};
+//     } catch (error) {
+//       console.error("ERROR in generatePdfReport (Puppeteer):", error);
+//       if (browser) {
+//         console.log("DEBUG: Closing browser due to error.");
+//         await browser.close();
+//       }
+//       res.status(500);
+//       throw new Error("Failed to generate PDF report on the server: " + error.message); // Send more specific error
+//     } finally {
+//       if (browser) {
+//         console.log("DEBUG: Ensuring browser is closed in finally block.");
+//         await browser.close(); // Ensure browser is closed
+//       }
+//     }
+//   }),
+// };
 
-module.exports = usersController;
+// module.exports = usersController;
 
 
 // // src/controllers/usersCtrl.js
@@ -542,7 +539,7 @@ module.exports = usersController;
 //     const { token } = req.params;
 //     const { password } = req.body;
 
-=======
+// =======
 //     try {
 //       await sendEmail(user.email, 'Password Reset Token', message);
 //       res.status(200).json({ message: 'Token sent to email!' });
@@ -560,7 +557,7 @@ module.exports = usersController;
 //     const { token } = req.params;
 //     const { password } = req.body;
 
->>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
+// >>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 //     const user = await User.findOne({
 //       passwordResetToken: token,
 //       passwordResetExpires: { $gt: Date.now() } // Check if token is not expired
