@@ -1,4 +1,4 @@
-// src/components/Dashboard/Dashboard.jsx
+
 import React, { useRef } from 'react';
 import TransactionList from '../Transactions/TransactionList';
 import TransactionChart from '../Transactions/TransactionChart';
