@@ -1,18 +1,10 @@
-<<<<<<< HEAD
-const asyncHandler = require("express-async-handler");
-const User = require("../model/User");
-const sendEmail = require("../utils/emailSender.js");
-const Transaction = require("../model/Transaction");
-const puppeteer = require('puppeteer');
-=======
+
     const asyncHandler = require("express-async-handler");
     const User = require("../model/User");
     const sendEmail = require("../utils/emailSender.js");
     const Transaction = require("../model/Transaction");
     const puppeteer = require('puppeteer');
     const chromium = require('@sparticuz/chromium'); // ! NEW: Import the chromium package
->>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
-
 
     const usersController = {
       //! Existing controller functions (register, login, profile, changeUserPassword, updateUserProfile, forgotPassword, resetPassword, sendSpendingReport)
@@ -70,7 +62,6 @@ const puppeteer = require('puppeteer');
           });
           console.log("DEBUG: PDF buffer generated.");
 
-<<<<<<< HEAD
   //! Change user password
   changeUserPassword: asyncHandler(async (req, res) => {
     const { newPassword } = req.body; // Only newPassword is needed as per current API
@@ -79,12 +70,10 @@ const puppeteer = require('puppeteer');
     //   res.status(400);
     //   throw new Error("Passwords do not match");
     // }
-=======
           res.setHeader('Content-Type', 'application/pdf');
           res.setHeader('Content-Disposition', `attachment; filename=financial-dashboard-report-${Date.now()}.pdf`);
           res.send(pdfBuffer);
           console.log("DEBUG: PDF sent successfully.");
->>>>>>> 1301c6bf6b8faf08ed20d7831e71f1bf56e380f1
 
         } catch (error) {
           console.error("ERROR in generatePdfReport (Puppeteer):", error);
