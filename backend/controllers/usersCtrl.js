@@ -4,13 +4,7 @@ const User = require("../model/User");
 const sendEmail = require("../utils/emailSender.js");
 const Transaction = require("../model/Transaction");
 const puppeteer = require('puppeteer');
-
-    const asyncHandler = require("express-async-handler");
-    const User = require("../model/User");
-    const sendEmail = require("../utils/emailSender.js");
-    const Transaction = require("../model/Transaction");
-    const puppeteer = require('puppeteer');
-    const chromium = require('@sparticuz/chromium'); // ! NEW: Import the chromium package
+const chromium = require('@sparticuz/chromium'); // ! NEW: Import the chromium package
 const puppeteer = require('puppeteer-core'); // ! MODIFIED: Use puppeteer-core
 const chrome = require('chrome-aws-lambda'); // ! MODIFIED: Use chrome-aws-lambda
 const crypto = require('crypto'); // Import crypto module for generatePasswordResetToken
