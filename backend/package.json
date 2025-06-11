@@ -6,7 +6,7 @@
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-"keywords": [],
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -23,5 +23,6 @@
     "node-cron": "^4.1.0",
     "nodemailer": "^7.0.3",
     "puppeteer": "^22.15.0"
+  },
   "description": ""
 }
