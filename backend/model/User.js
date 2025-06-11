@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs"); // Used for password hashing and comparison
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken"); // Used for generating JWT tokens
 
 const userSchema = new mongoose.Schema(
