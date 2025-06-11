@@ -1,4 +1,4 @@
-
+// src/components/Dashboard/Dashboard.jsx
 import React, { useRef } from 'react';
 import TransactionList from '../Transactions/TransactionList';
 import TransactionChart from '../Transactions/TransactionChart';
@@ -18,9 +18,8 @@ const Dashboard = () => {
 
   // Placeholder function for the download button
   const handleDownloadPdfPlaceholder = () => {
-    alert("PDF download feature is currently unavailable or under development.");
-    // Or simply do nothing:
-    // console.log("Download PDF button clicked (functionality removed)");
+    // ! MODIFIED: Removed the alert message. The button will now do nothing visually.
+    console.log("Download PDF button clicked (functionality currently disabled).");
   };
 
   // Fetch categories data
@@ -80,7 +79,7 @@ const Dashboard = () => {
         <div className="mb-6 flex justify-end">
           <button
             id="downloadButton"
-            onClick={handleDownloadPdfPlaceholder} 
+            onClick={handleDownloadPdfPlaceholder} {/* Call the placeholder function */}
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200 ease-in-out transform hover:scale-105"
           >
             Download Dashboard (PDF)
@@ -130,7 +129,6 @@ const Dashboard = () => {
 
 export default Dashboard;
 
- 
 
 // import React from "react";
 
