@@ -325,7 +325,7 @@ module.exports = usersController;
       // For security, always send a success message even if email not found
       // return res.status(200).json({ message: "If an account with that email exists, a password reset link has been sent to your inbox." });
       // throw new Error("User with that email does not exist."); // Avoid this for security
-    }
+    // }
 
 //   //! User login
 //   login: asyncHandler(async (req, res) => {
