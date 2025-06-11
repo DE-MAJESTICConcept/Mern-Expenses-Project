@@ -1,27 +1,11 @@
-import axios from "axios";
-import { BASE_URL } from "../../utils/url";
-import { getUserFromStorage } from "../../utils/getUserFromStorage";
-
-// Helper function to get authentication headers dynamically (for authenticated APIs)
-const getAuthHeaders = () => {
-  const token = getUserFromStorage();
-  if (!token) {
-    console.warn("Authentication token not found. User might not be logged in or token expired.");
-    throw new Error("Authentication required.");
-  }
-  return {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-};
+import axiosInstance from "../../utils/axiosInstance";
 
 //! --- User Authentication APIs ---
 
-// Login
+// Login - Does NOT require an existing token
 export const loginAPI = async ({ email, password }) => {
   try {
-    const response = await axios.post(`${BASE_URL}/users/login`, { email, password });
+    const response = await axiosInstance.post(`/users/login`, { email, password });
     return response.data;
   } catch (error) {
     console.error("Error in loginAPI:", error.response?.data || error.message);
@@ -29,10 +13,10 @@ export const loginAPI = async ({ email, password }) => {
   }
 };
 
-// Register
+// Register - Does NOT require an existing token
 export const registerAPI = async ({ email, password, username }) => {
   try {
-    const response = await axios.post(`${BASE_URL}/users/register`, { email, password, username });
+    const response = await axiosInstance.post(`/users/register`, { email, password, username });
     return response.data;
   } catch (error) {
     console.error("Error in registerAPI:", error.response?.data || error.message);
@@ -40,10 +24,10 @@ export const registerAPI = async ({ email, password, username }) => {
   }
 };
 
-// Change Password (requires authentication)
+//! Change Password - Requires authentication (token attached by interceptor)
 export const changePasswordAPI = async (newPassword) => {
   try {
-    const response = await axios.put(`${BASE_URL}/users/change-password`, { newPassword }, getAuthHeaders());
+    const response = await axiosInstance.put(`/users/change-password`, { newPassword });
     return response.data;
   } catch (error) {
     console.error("Error in changePasswordAPI:", error.response?.data || error.message);
@@ -51,10 +35,10 @@ export const changePasswordAPI = async (newPassword) => {
   }
 };
 
-// Update Profile (requires authentication)
+//! Update Profile - Requires authentication (token attached by interceptor)
 export const updateProfileAPI = async ({ email, username }) => {
   try {
-    const response = await axios.put(`${BASE_URL}/users/update-profile`, { email, username }, getAuthHeaders());
+    const response = await axiosInstance.put(`/users/update-profile`, { email, username });
     return response.data;
   } catch (error) {
     console.error("Error in updateProfileAPI:", error.response?.data || error.message);
@@ -62,10 +46,10 @@ export const updateProfileAPI = async ({ email, username }) => {
   }
 };
 
-// Initiate Password Reset (does NOT require authentication)
+//! Initiate Password Reset - Does NOT require authentication
 export const initiatePasswordResetAPI = async (email) => {
   try {
-    const response = await axios.post(`${BASE_URL}/users/forgot-password`, { email });
+    const response = await axiosInstance.post(`/users/forgot-password`, { email });
     return response.data;
   } catch (error) {
     console.error("Error in initiatePasswordResetAPI:", error.response?.data || error.message);
@@ -73,13 +57,10 @@ export const initiatePasswordResetAPI = async (email) => {
   }
 };
 
-//! NEW: Reset Password API (uses token from URL, does NOT require session authentication)
+//! Reset Password - Does NOT require session authentication (token is in URL param)
 export const resetPasswordAPI = async (token, newPassword) => {
   try {
-    const response = await axios.post(
-      `${BASE_URL}/users/reset-password/${token}`, // Endpoint will include the token
-      { newPassword } // Send the new password in the body
-    );
+    const response = await axiosInstance.post(`/users/reset-password/${token}`, { newPassword });
     return response.data;
   } catch (error) {
     console.error("Error in resetPasswordAPI:", error.response?.data || error.message);
@@ -87,9 +68,122 @@ export const resetPasswordAPI = async (token, newPassword) => {
   }
 };
 
+//! Get User Profile - Requires authentication (token attached by interceptor)
+export const getUserProfileAPI = async () => {
+  try {
+    const response = await axiosInstance.get(`/users/profile`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in getUserProfileAPI:", error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
+
+//! Send Spending Report - Requires authentication (token attached by interceptor)
+export const sendSpendingReportAPI = async () => {
+  try {
+    const response = await axiosInstance.post(`/users/send-spending-report`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in sendSpendingReportAPI:", error.response?.data || error.message);
+    throw error.response?.data || error;
+  }
+};
 
 
+// import axiosInstance from "../../utils/axiosInstance"; // Using the custom Axios instance
+// // No need for direct 'axios' or 'getUserFromStorage' imports here anymore
+// // as axiosInstance handles base URL, headers, and error interception.
 
+// // Helper function to get authentication headers is now redundant if using axiosInstance for all authenticated calls.
+// // The request interceptor in axiosInstance automatically adds the Authorization header.
 
+// //! --- User Authentication APIs ---
 
+// // Login - Does NOT require an existing token
+// export const loginAPI = async ({ email, password }) => {
+//   try {
+//     const response = await axiosInstance.post(`/users/login`, { email, password });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error in loginAPI:", error.response?.data || error.message);
+//     throw error.response?.data || error;
+//   }
+// };
 
+// // Register - Does NOT require an existing token
+// export const registerAPI = async ({ email, password, username }) => {
+//   try {
+//     const response = await axiosInstance.post(`/users/register`, { email, password, username });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error in registerAPI:", error.response?.data || error.message);
+//     throw error.response?.data || error;
+//   }
+// };
+
+// //! Change Password - Requires authentication (token attached by interceptor)
+// export const changePasswordAPI = async (newPassword) => {
+//   try {
+//     const response = await axiosInstance.put(`/users/change-password`, { newPassword });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error in changePasswordAPI:", error.response?.data || error.message);
+//     throw error.response?.data || error;
+//   }
+// };
+
+// //! Update Profile - Requires authentication (token attached by interceptor)
+// export const updateProfileAPI = async ({ email, username }) => {
+//   try {
+//     const response = await axiosInstance.put(`/users/update-profile`, { email, username });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error in updateProfileAPI:", error.response?.data || error.message);
+//     throw error.response?.data || error;
+//   }
+// };
+
+// //! Initiate Password Reset - Does NOT require authentication
+// export const initiatePasswordResetAPI = async (email) => {
+//   try {
+//     const response = await axiosInstance.post(`/users/forgot-password`, { email });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error in initiatePasswordResetAPI:", error.response?.data || error.message);
+//     throw error.response?.data || error;
+//   }
+// };
+
+// //! Reset Password - Does NOT require session authentication (token is in URL param)
+// export const resetPasswordAPI = async (token, newPassword) => {
+//   try {
+//     const response = await axiosInstance.post(`/users/reset-password/${token}`, { newPassword });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error in resetPasswordAPI:", error.response?.data || error.message);
+//     throw error.response?.data || error;
+//   }
+// };
+
+// //! Get User Profile - Requires authentication (token attached by interceptor)
+// export const getUserProfileAPI = async () => {
+//   try {
+//     const response = await axiosInstance.get(`/users/profile`);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error in getUserProfileAPI:", error.response?.data || error.message);
+//     throw error.response?.data || error;
+//   }
+// };
+
+// //! NEW: Send Spending Report - Requires authentication (token attached by interceptor)
+// export const sendSpendingReportAPI = async () => {
+//   try {
+//     const response = await axiosInstance.post(`/users/send-spending-report`);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error in sendSpendingReportAPI:", error.response?.data || error.message);
+//     throw error.response?.data || error;
+//   }
+// };
