@@ -49,7 +49,7 @@ export default function PrivateNavbar() {
                     <span className="text-gray-800 text-xl md:text-2xl tracking-tight">OTZAR</span>
                   </Link>
                 </div>
-                {/* Desktop navigation links */}
+           
                 <div className="hidden md:ml-6 md:flex md:space-x-8">
                   <Link
                     to="/dashboard"
@@ -64,7 +64,7 @@ export default function PrivateNavbar() {
                     Add Transaction
                   </Link>
                   <Link
-                    to="/chatbot" {/* Uncommented and styled */}
+                    to="/chatbot"
                     className="inline-flex items-center px-1 pt-1 text-base font-semibold text-gray-700 hover:text-purple-700 border-b-2 border-transparent hover:border-purple-500 transition-all duration-250 ease-in-out"
                   >
                     Chatbot
