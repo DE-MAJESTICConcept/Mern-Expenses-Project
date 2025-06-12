@@ -63,12 +63,7 @@ export default function PrivateNavbar() {
                   >
                     Add Transaction
                   </Link>
-                  <Link
-                    to="/chatbot"
-                    className="inline-flex items-center px-1 pt-1 text-base font-semibold text-gray-700 hover:text-purple-700 border-b-2 border-transparent hover:border-purple-500 transition-all duration-250 ease-in-out"
-                  >
-                    Chatbot
-                  </Link>
+
                   <Link
                     to="/add-category"
                     className="inline-flex items-center px-1 pt-1 text-base font-semibold text-gray-700 hover:text-purple-700 border-b-2 border-transparent hover:border-purple-500 transition-all duration-250 ease-in-out"
@@ -90,7 +85,7 @@ export default function PrivateNavbar() {
                 </div>
               </div>
 
-              {/* Desktop Logout Button */}
+            
               <div className="flex items-center ml-auto">
                 <div className="flex-shrink-0">
                   <button
