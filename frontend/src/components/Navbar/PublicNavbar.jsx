@@ -12,7 +12,7 @@ export default function PublicNavbar() {
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 justify-between items-center"> {/* Added items-center for vertical alignment */}
+            <div className="flex h-16 justify-between items-center">
               <div className="flex items-center">
                 <div className="-ml-2 mr-2 flex items-center md:hidden">
                   {/* Mobile menu button */}
@@ -113,7 +113,7 @@ export default function PublicNavbar() {
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 justify-between items-center"> {/* Added items-center for vertical alignment */}
+            <div className="flex h-16 justify-between items-center">
               <div className="flex items-center">
                 <div className="-ml-2 mr-2 flex items-center md:hidden">
                   {/* Mobile menu button */}
